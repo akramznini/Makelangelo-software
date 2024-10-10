@@ -18,6 +18,7 @@ class HistogramTest {
         testImg = new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
     }
 
+    // Ce test vérifie le comportement avec une image contenant des pixels rouges et bleus.
     @Test
     void testGetRGBHistogramOf() {
         // Arrange
@@ -40,6 +41,7 @@ class HistogramTest {
         assertEquals(0, histogram.green[255], "Ne devrait pas avoir de pixels verts");
     }
 
+    // Ce test vérifie le comportement avec une image contenant des pixels gris foncé et gris clair.
     @Test
     void testGetGreyHistogramOf() {
         // Arrange
@@ -63,29 +65,30 @@ class HistogramTest {
         assertEquals(0, histogram.red[255], "Ne devrait pas avoir de pixels blancs");
     }
 
+
+    // Ce test vérifie le comportement avec une image d'une seule couleur.
     @Test
-    void testGetGreyHistogramOf_AllColors() {
+    void testGetGreyHistogramOf_SingleColor() {
         // Arrange
-        Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.CYAN, Color.MAGENTA};
-        int index = 0;
+        Color color = new Color(100, 150, 200);
         for (int y = 0; y < 10; y++) {
             for (int x = 0; x < 10; x++) {
-                testImg.setRGB(x, y, colors[index % colors.length].getRGB());
-                index++;
+                testImg.setRGB(x, y, color.getRGB());
             }
         }
+
 
         // Act
         histogram.getGreyHistogramOf(testImg);
 
         // Assert
-        int totalPixels = 0;
-        for (int i = 0; i < 256; i++) {
-            totalPixels += histogram.red[i];
-        }
-        assertEquals(100, totalPixels, "Le nombre total de pixels devrait être 100");
+        int expectedGreyValue = (100 + 150 + 200) / 3;
+        assertEquals(100, histogram.red[expectedGreyValue]);
+        assertEquals(0, histogram.red[expectedGreyValue - 1]);
+        assertEquals(0, histogram.red[expectedGreyValue + 1]);
     }
 
+    // Ce test vérifie que la fonction retourne le bon nombre de niveaux et que ces niveaux sont correctement ordonnés.
     @Test
     void testGetLevels() {
         // Arrange
@@ -103,6 +106,7 @@ class HistogramTest {
         assertTrue(levels[2] < levels[3], "Le troisième niveau devrait être inférieur au quatrième");
     }
 
+    // Ce test vérifie que la fonction lance une exception lorsqu'on lui passe un nombre de niveaux invalide (0 ou négatif).
     @Test
     void testGetLevels_InvalidInput() {
         // Arrange
@@ -112,6 +116,7 @@ class HistogramTest {
                 "Devrait lancer une exception pour un nombre de niveaux invalide");
     }
 
+    // Ce test vérifie que la fonction retourne les bons niveaux pour des valeurs d'entrée données.
     @Test
     void testGetLevelsMapped() {
         // Arrange
@@ -130,6 +135,7 @@ class HistogramTest {
         assertEquals(191, levels[2], "Le troisième niveau devrait être à 191");
     }
 
+    // Ce test vérifie que la fonction lance une exception lorsqu'on lui passe un tableau d'entrée vide.
     @Test
     void testGetLevelsMapped_InvalidInput() {
         // Arrange
