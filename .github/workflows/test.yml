@@ -46,7 +46,7 @@ jobs:
           export MAVEN_OPTS="${{ matrix.flag }}"
           ./mvnw -B verify
 
-    - name: Get JaCoCo Coverage and Check Threshhold
+    - name: Get JaCoCo Coverage and Check coverage threshhold
       id: coverage
       run: |
         coverage=$(python3 config/coverage.py target/site/jacoco/jacoco.csv) 
