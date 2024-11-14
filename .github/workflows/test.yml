@@ -48,8 +48,10 @@ jobs:
 
       - name: Coverage Threshold Check
         run: |
-          if [[ "$COVERAGE" -lt 24.46 ]]; then
-            echo "Coverage did not meet threshold with flag ${{ matrix.jvm_flag }}"
+          COVERAGE=$COVERAGE
+          threshold=24.46
+          if [[ $(echo "$coverage - $threshold <= 0.1" | bc -l) ]]; then
+            echo "Coverage did not improve with flag ${{ matrix.jvm_flag }}"
             exit 1
           else
             echo "Coverage passed for flag ${{ matrix.jvm_flag }}"
